@@ -88,4 +88,4 @@ const filteredRecords = computed(() => {
     </div>
     <AppFooter />
   </div>
-</template>
+</template><!-- LocalStorage persistence ready -->
