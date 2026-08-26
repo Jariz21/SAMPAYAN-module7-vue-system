@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Vue Test and Build
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test-and-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run Vitest Unit Tests
+        run: npm run test:run
+
       - name: Build project
         run: npx vite build --base=/SAMPAYAN-module7-vue-system/
 
@@ -38,7 +41,7 @@ jobs:
           path: './dist'
 
   deploy:
-    needs: build
+    needs: test-and-build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
