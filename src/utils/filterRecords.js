@@ -1,15 +1,18 @@
-export function filterRecords(records, query) {
-  if (!query || query.trim() === '') {
-    return records;
-  }
+export function filterRecords(records, query = '', statusFilter = 'All') {
+  if (!Array.isArray(records)) return [];
 
-  const cleanQuery = query.toLowerCase().trim();
+  return records.filter((record) => {
+    // 1. Check text search query against name, studentNo, and program
+    const matchesQuery =
+      !query ||
+      [record.name, record.studentNo, record.program]
+        .some(field => field && field.toLowerCase().includes(query.toLowerCase()));
 
-  return records.filter((student) => {
-    const name = student.name ? student.name.toLowerCase() : '';
-    const studentNo = student.studentNo ? String(student.studentNo).toLowerCase() : '';
-    const program = student.program ? student.program.toLowerCase() : '';
+    // 2. Check status filter
+    const matchesStatus =
+      statusFilter === 'All' ||
+      (record.status || 'Active') === statusFilter;
 
-    return name.includes(cleanQuery) || studentNo.includes(cleanQuery) || program.includes(cleanQuery);
+    return matchesQuery && matchesStatus;
   });
 }
